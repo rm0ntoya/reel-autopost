@@ -81,7 +81,7 @@ ffmpeg -version | head -1 && python3 --version && sqlite3 --version && git --ver
 ## 2. Baixar o projeto
 
 ```bash
-git clone https://github.com/<usuario>/<repositorio>.git reel-autopost
+git clone https://github.com/rm0ntoya/reel-autopost.git
 cd reel-autopost
 npm run setup
 ```
