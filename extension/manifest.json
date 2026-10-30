@@ -1,0 +1,35 @@
+{
+  "manifest_version": 3,
+  "name": "Reel Autopost",
+  "version": "2.4.2",
+  "description": "Conecta na sua conta do site e posta automaticamente no Instagram os vídeos que você baixar lá.",
+  "action": {
+    "default_title": "Reel Autopost",
+    "default_popup": "popup.html"
+  },
+  "background": {
+    "service_worker": "background.js",
+    "type": "module"
+  },
+  "permissions": [
+    "scripting",
+    "tabs",
+    "storage",
+    "alarms",
+    "debugger"
+  ],
+  "host_permissions": [
+    "https://www.instagram.com/*",
+    "http://localhost/*"
+  ],
+  "content_scripts": [
+    {
+      "matches": [
+        "http://localhost:9283/*"
+      ],
+      "js": [
+        "bridge.js"
+      ]
+    }
+  ]
+}

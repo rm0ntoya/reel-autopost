@@ -1,0 +1,20 @@
+{
+  "name": "reel-autopost-monorepo",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "description": "Reel Autopost: site + extensão do Chrome + 9router. Baixa vídeos do Instagram/TikTok, edita com o perfil do usuário, gera legenda com IA e posta sozinho no Instagram.",
+  "scripts": {
+    "setup": "npm install && npm install --prefix site",
+    "start": "npm run build:extension && npm start --prefix site",
+    "build:extension": "node scripts/obfuscate-extension.mjs",
+    "build:site": "sh scripts/build-site.sh",
+    "sync:9router": "sh scripts/sync-9router-data.sh"
+  },
+  "engines": {
+    "node": ">=22.13"
+  },
+  "devDependencies": {
+    "javascript-obfuscator": "^4.2.2"
+  }
+}

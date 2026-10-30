@@ -1,0 +1,11 @@
+{
+  "name": "reel-9router",
+  "private": true,
+  "description": "9router (gateway de IA) rodando na Discloud para o Reel Autopost",
+  "scripts": {
+    "start": "node start.js"
+  },
+  "dependencies": {
+    "9router": "0.5.111"
+  }
+}

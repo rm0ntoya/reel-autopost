@@ -1,0 +1,24 @@
+# Dependências e builds
+node_modules/
+dist/
+site/extension-dist/
+.venv/
+
+# Credenciais e configuração local (NUNCA versionar)
+.env
+.env.*
+!.env.example
+production.env
+cookies.txt
+*.cookies.txt
+
+# Dados de runtime
+site/data/
+9router/data/
+*.log
+
+# Arquivos pessoais / ferramentas locais
+.local/
+.playwright-mcp/
+.superpowers/
+.DS_Store

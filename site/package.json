@@ -1,0 +1,12 @@
+{
+  "name": "reel-autopost",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "start": "node server.js"
+  },
+  "dependencies": {
+    "@napi-rs/canvas": "1.0.13"
+  }
+}

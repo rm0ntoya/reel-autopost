@@ -1,0 +1,274 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Reel Autopost</title>
+<meta name="theme-color" content="#ffffff">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Geist:wght@400;500;600&family=Geist+Mono:wght@500&display=swap">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='9' fill='%230c0c0d'/%3E%3Ccircle cx='16' cy='16' r='5' fill='%23fff'/%3E%3C/svg%3E">
+<link rel="stylesheet" href="/style.css">
+</head>
+<body>
+
+<!-- ============ Login / cadastro ============ -->
+<section id="auth" class="auth" hidden>
+  <div class="auth-side">
+    <div class="brand"><span class="brand-mark"><i></i></span>Reel Autopost</div>
+
+    <div class="auth-box">
+      <h1 id="auth-title">Bem-vindo de volta</h1>
+      <p id="auth-sub" class="sub">Entre para gerenciar seus vídeos.</p>
+      <form id="auth-form" novalidate>
+        <label class="field">
+          <span>E-mail</span>
+          <input id="email" type="email" required autocomplete="email" placeholder="voce@email.com">
+        </label>
+        <label class="field">
+          <span>Senha</span>
+          <span class="pw">
+            <input id="password" type="password" required minlength="8" autocomplete="current-password" placeholder="••••••••">
+            <button type="button" id="pw-toggle" class="pw-toggle">Mostrar</button>
+          </span>
+          <small id="pw-hint" class="hint-text" hidden>Mínimo de 8 caracteres.</small>
+        </label>
+        <p id="auth-msg" class="form-err" role="alert"></p>
+        <button id="auth-go" class="btn primary block">Entrar</button>
+      </form>
+      <p class="switch"><span id="switch-text">Não tem conta?</span> <a href="#" id="auth-switch">Criar conta</a></p>
+    </div>
+
+    <p class="legal">Seus vídeos editados, legendados e postados sozinhos.</p>
+  </div>
+
+  <div class="auth-art" aria-hidden="true">
+    <div class="orbs"><i></i><i></i><i></i></div>
+    <div class="grain"></div>
+    <div class="flow">
+      <div class="flow-card"><span class="flow-ico">↧</span><div><b>Link recebido</b><small>tiktok.com/@chef/video/…</small></div></div>
+      <div class="flow-card"><span class="flow-ico">✦</span><div><b>Editado com o seu perfil</b><small>Foto, nome e frase no topo</small></div></div>
+      <div class="flow-card"><span class="flow-ico">¶</span><div><b>Legenda gerada</b><small>#珍発明 『Guarda-chuva para Sorvete』</small></div></div>
+      <div class="flow-card done"><span class="flow-ico">✓</span><div><b>Postado no Instagram</b><small>agora mesmo</small></div></div>
+    </div>
+    <div class="art-copy">
+      <h2>Cole o link.<br>A gente edita, legenda e posta.</h2>
+      <p>Instagram e TikTok direto no seu perfil — pelo site ou pelo Telegram.</p>
+    </div>
+  </div>
+</section>
+
+<!-- ============ Painel ============ -->
+<section id="app" class="shell" hidden>
+  <aside class="side">
+    <div class="brand"><span class="brand-mark"><i></i></span>Reel Autopost</div>
+    <nav class="nav">
+      <button type="button" class="nav-item active" data-view="videos">
+        <svg viewBox="0 0 20 20" aria-hidden="true"><rect x="3" y="4" width="14" height="12" rx="3"/><path d="M8.5 7.8v4.4l3.8-2.2z" class="fill"/></svg>
+        Vídeos <span class="nav-count" id="nav-count"></span>
+      </button>
+      <button type="button" class="nav-item" data-view="profile">
+        <svg viewBox="0 0 20 20" aria-hidden="true"><circle cx="10" cy="7.5" r="3"/><path d="M4 16.5c1-3 3.3-4.5 6-4.5s5 1.5 6 4.5"/></svg>
+        Personalizar
+      </button>
+      <button type="button" class="nav-item" data-view="connections">
+        <svg viewBox="0 0 20 20" aria-hidden="true"><path d="M8.5 11.5l3-3M7 9.5L5.3 11.2a2.6 2.6 0 003.6 3.6L10.5 13M13 10.5l1.7-1.7a2.6 2.6 0 00-3.6-3.6L9.5 7"/></svg>
+        Conexões
+      </button>
+    </nav>
+    <div class="side-foot">
+      <div id="conn-status" class="conn"><i></i><span>…</span></div>
+      <div class="me">
+        <img id="me-avatar" class="avatar-sm" alt="">
+        <div class="me-text"><b id="me"></b><a href="#" id="logout">Sair</a></div>
+      </div>
+    </div>
+  </aside>
+
+  <main class="main">
+    <!-- Vídeos -->
+    <section data-panel="videos" class="page">
+      <header class="page-head">
+        <div>
+          <h1>Vídeos</h1>
+          <p class="sub">Tudo que você mandou pra postar, do link ao Instagram.</p>
+        </div>
+        <p id="ext-hint" class="ext-hint"></p>
+      </header>
+
+      <form id="dl" class="paste">
+        <svg class="paste-ico" viewBox="0 0 20 20" aria-hidden="true"><path d="M8.5 11.5l3-3M7 9.5L5.3 11.2a2.6 2.6 0 003.6 3.6L10.5 13M13 10.5l1.7-1.7a2.6 2.6 0 00-3.6-3.6L9.5 7"/></svg>
+        <input id="url" type="url" required placeholder="Cole um link do Instagram ou TikTok…" autocomplete="off">
+        <div class="seg" role="radiogroup" aria-label="Tipo de vídeo">
+          <label><input type="radio" name="mode" value="edited"><span>Editado</span></label>
+          <label><input type="radio" name="mode" value="raw"><span>Só o vídeo</span></label>
+        </div>
+        <button id="dl-go" class="btn primary">Adicionar</button>
+      </form>
+      <p id="dl-msg" class="form-msg" role="status"></p>
+
+      <div class="stats" id="stats">
+        <button type="button" class="stat" data-filter="queue"><span class="stat-dot q"></span><b data-count="queue">0</b><span>Na fila</span></button>
+        <button type="button" class="stat" data-filter="posted"><span class="stat-dot p"></span><b data-count="posted">0</b><span>Postados</span></button>
+        <button type="button" class="stat" data-filter="review"><span class="stat-dot r"></span><b data-count="review">0</b><span>Revisão</span></button>
+        <button type="button" class="stat" data-filter="failed"><span class="stat-dot f"></span><b data-count="failed">0</b><span>Falhas</span></button>
+      </div>
+
+      <div class="list-card">
+        <div class="chips" id="filters" role="tablist">
+          <button type="button" class="chip active" data-filter="all">Todos</button>
+          <button type="button" class="chip" data-filter="processing">Processando</button>
+          <button type="button" class="chip" data-filter="queue">Na fila</button>
+          <button type="button" class="chip" data-filter="posted">Postados</button>
+          <button type="button" class="chip" data-filter="review">Revisão</button>
+          <button type="button" class="chip" data-filter="failed">Falhas</button>
+        </div>
+        <div id="jobs" class="list"></div>
+      </div>
+    </section>
+
+    <!-- Personalizar -->
+    <section data-panel="profile" class="page" hidden>
+      <header class="page-head">
+        <div>
+          <h1>Personalizar</h1>
+          <p class="sub">Como o topo dos seus vídeos editados aparece.</p>
+        </div>
+      </header>
+      <div class="two-col">
+        <form id="profile" class="card form-card">
+          <div class="avatar-row">
+            <img id="avatar" alt="" width="64" height="64">
+            <div>
+              <b>Foto do perfil</b>
+              <p class="muted small">Também vira a capa do reel.</p>
+            </div>
+            <label class="btn ghost small">Trocar foto<input id="avatar-file" type="file" accept="image/*" hidden></label>
+          </div>
+          <label class="field"><span>Nome da página</span><input id="p-name" maxlength="40" placeholder="Minha Página"></label>
+          <label class="field"><span>@ do Instagram</span><input id="p-handle" maxlength="40" placeholder="@minhapagina"></label>
+          <label class="field"><span>Frase em cima do vídeo</span><input id="p-phrase" maxlength="160" placeholder="Os melhores vídeos estão aqui 😂"></label>
+          <label class="switch-row">
+            <span><b>Selo de verificado</b><small>Mostra o selo azul ao lado do nome.</small></span>
+            <input id="p-verified" type="checkbox" class="toggle">
+          </label>
+          <label class="switch-row">
+            <span><b>Postar automaticamente</b><small>Desligado: você revisa a legenda antes de postar.</small></span>
+            <input id="p-auto" type="checkbox" class="toggle">
+          </label>
+          <div class="switch-row">
+            <span><b>Reutilizar a mesma legenda</b><small id="reuse-help">Em quantos vídeos seguidos usar a mesma legenda.</small></span>
+            <span class="stepper">
+              <button type="button" data-step="-1" aria-label="Menos">−</button>
+              <input id="p-reuse" type="number" min="1" max="100" inputmode="numeric" aria-label="Vídeos por legenda">
+              <button type="button" data-step="1" aria-label="Mais">+</button>
+            </span>
+          </div>
+          <div class="cap-fixed">
+            <label class="field"><span>Legenda fixa (opcional)</span><textarea id="p-cap" rows="4" maxlength="2200" placeholder="Cole aqui uma legenda pronta. Deixe vazio pra gerar com IA."></textarea></label>
+            <div class="switch-row" id="cap-uses-row" hidden>
+              <span><b>Usar essa legenda em quantos vídeos</b><small id="cap-uses-help">Depois desse total, segue a opção abaixo.</small></span>
+              <span class="stepper">
+                <button type="button" data-cap-step="-1" aria-label="Menos">−</button>
+                <input id="p-cap-uses" type="number" min="1" max="1000" inputmode="numeric" aria-label="Vídeos com a legenda fixa">
+                <button type="button" data-cap-step="1" aria-label="Mais">+</button>
+              </span>
+            </div>
+            <label class="field" id="cap-after-row"><span>Quando a legenda fixa acabar</span>
+              <select id="p-after">
+                <option value="generate">Gerar legendas com IA</option>
+                <option value="none">Postar sem legenda</option>
+              </select>
+            </label>
+          </div>
+          <div class="form-foot">
+            <p id="p-msg" class="form-msg"></p>
+            <button id="p-save" class="btn primary">Salvar</button>
+          </div>
+        </form>
+        <div class="card preview-card">
+          <p class="label">Prévia</p>
+          <div class="phone"><img id="preview" alt="Prévia do topo do vídeo editado"></div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Conexões -->
+    <section data-panel="connections" class="page" hidden>
+      <header class="page-head">
+        <div>
+          <h1>Conexões</h1>
+          <p class="sub">A extensão posta no Instagram. O Telegram recebe links de qualquer lugar.</p>
+        </div>
+      </header>
+
+      <div class="card code-card">
+        <div>
+          <p class="label">Código de conexão</p>
+          <p class="muted small">Serve pra extensão e pro Telegram. Vale 10 minutos e uma conexão só.</p>
+        </div>
+        <div class="code-row">
+          <div id="code" class="code">––––-––––</div>
+          <button id="gen-code" type="button" class="btn primary">Gerar código</button>
+        </div>
+        <p id="code-state" class="muted small"></p>
+      </div>
+
+      <div class="two-col even">
+        <div class="card conn-card">
+          <div class="conn-head">
+            <span class="conn-ico chrome"><svg viewBox="0 0 20 20" aria-hidden="true"><circle cx="10" cy="10" r="7"/><circle cx="10" cy="10" r="2.6"/><path d="M10 7.4h6.3M7.8 11.3L4.6 5.8M12.2 11.3L9 16.9"/></svg></span>
+            <div><h2>Extensão do Chrome</h2><p class="muted small">Posta os vídeos no Instagram logado no Chrome.</p></div>
+          </div>
+          <ol class="steps">
+            <li><a class="btn ghost small" href="/reel-autopost.zip" download>Baixar extensão</a></li>
+            <li>Descompacte o arquivo.</li>
+            <li>Abra <code>chrome://extensions</code> e ligue o <b>Modo do desenvolvedor</b>.</li>
+            <li><b>Carregar sem compactação</b> → pasta <code>reel-autopost</code>.</li>
+            <li>Clique no ícone da extensão e digite o código.</li>
+          </ol>
+        </div>
+        <div class="card conn-card">
+          <div class="conn-head">
+            <span class="conn-ico tg"><svg viewBox="0 0 20 20" aria-hidden="true"><path d="M16.5 4L3.5 9.2l4.3 1.5 1.6 4.8 2.4-2.9 3.3 2.4z"/><path d="M7.8 10.7l6-4.3"/></svg></span>
+            <div><h2>Telegram</h2><p class="muted small">Mande o link pro bot e o vídeo entra na fila.</p></div>
+          </div>
+          <div id="tg-connect">
+            <p class="muted small" id="tg-text">Gere um código acima e abra o bot.</p>
+            <a id="tg-link" class="btn ghost small" target="_blank" rel="noopener" hidden>Abrir no Telegram</a>
+          </div>
+        </div>
+      </div>
+
+      <h2 class="section-title">Dispositivos conectados</h2>
+      <div id="devices" class="card list-card devices"></div>
+    </section>
+  </main>
+
+  <nav class="tabbar">
+    <button type="button" class="tab-item active" data-view="videos">
+      <svg viewBox="0 0 20 20" aria-hidden="true"><rect x="3" y="4" width="14" height="12" rx="3"/><path d="M8.5 7.8v4.4l3.8-2.2z" class="fill"/></svg>Vídeos
+    </button>
+    <button type="button" class="tab-item" data-view="profile">
+      <svg viewBox="0 0 20 20" aria-hidden="true"><circle cx="10" cy="7.5" r="3"/><path d="M4 16.5c1-3 3.3-4.5 6-4.5s5 1.5 6 4.5"/></svg>Perfil
+    </button>
+    <button type="button" class="tab-item" data-view="connections">
+      <svg viewBox="0 0 20 20" aria-hidden="true"><path d="M8.5 11.5l3-3M7 9.5L5.3 11.2a2.6 2.6 0 003.6 3.6L10.5 13M13 10.5l1.7-1.7a2.6 2.6 0 00-3.6-3.6L9.5 7"/></svg>Conexões
+    </button>
+  </nav>
+</section>
+
+<!-- Detalhe do vídeo -->
+<div id="drawer" class="drawer" hidden>
+  <div class="drawer-backdrop" data-close></div>
+  <aside class="drawer-panel" role="dialog" aria-modal="true" aria-labelledby="drawer-title">
+    <div id="drawer-body"></div>
+  </aside>
+</div>
+
+<div id="toast" class="toast" role="status" aria-live="polite"></div>
+
+<script src="/app.js"></script>
+</body>
+</html>

@@ -1,0 +1,109 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<style>
+  :root {
+    --ink: #0c0c0d; --ink-2: #3a3a40; --muted: #76767e; --faint: #a3a3aa;
+    --line: #ececee; --line-2: #e1e1e5; --soft: #f7f7f5;
+    --p-bg: #eaf8ef; --p-ink: #0b7a43; --f-bg: #fdf0ef; --f-ink: #b4271b; --r-bg: #fff6e6; --r-ink: #a5560a;
+    --peach: #ff9f73; --lilac: #b8a3ff; --sky: #8dd3ff;
+  }
+  * { box-sizing: border-box; }
+  body {
+    width: 320px; margin: 0; color: var(--ink); background: #fff;
+    font: 13px/1.5 ui-sans-serif, system-ui, -apple-system, 'Segoe UI', sans-serif; -webkit-font-smoothing: antialiased;
+  }
+  [hidden] { display: none !important; }
+  header {
+    position: relative; overflow: hidden; padding: 16px 16px 14px; background: #f1eee9;
+  }
+  header::before, header::after { content: ''; position: absolute; border-radius: 50%; filter: blur(28px); opacity: .8; }
+  header::before { width: 160px; height: 120px; background: var(--peach); top: -50px; left: -30px; }
+  header::after { width: 170px; height: 120px; background: var(--lilac); top: -40px; right: -50px; }
+  .brand { position: relative; display: flex; align-items: center; gap: 9px; font-weight: 600; font-size: 14px; letter-spacing: -.02em; }
+  .mark { width: 24px; height: 24px; border-radius: 7px; background: var(--ink); display: grid; place-items: center; }
+  .mark i { width: 8px; height: 8px; border-radius: 50%; background: #fff; }
+  .account { position: relative; margin-top: 10px; display: flex; align-items: center; gap: 8px; padding: 8px 10px; border-radius: 10px; background: rgba(255,255,255,.7); backdrop-filter: blur(8px); }
+  .account div { min-width: 0; flex: 1; line-height: 1.3; }
+  .account b { display: block; font-weight: 500; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  .account small { color: var(--muted); font-size: 11.5px; }
+  .live { width: 8px; height: 8px; border-radius: 50%; background: #22a35a; box-shadow: 0 0 0 3px rgba(34,163,90,.18); flex: none; }
+  .live.off { background: var(--f-ink); box-shadow: 0 0 0 3px rgba(180,39,27,.15); }
+  .live.busy { background: #3b3fc4; box-shadow: 0 0 0 3px rgba(59,63,196,.15); animation: pulse 1.2s infinite; }
+  main { padding: 14px 16px 16px; display: flex; flex-direction: column; gap: 12px; }
+  h1 { font-size: 17px; letter-spacing: -.02em; margin: 0; font-weight: 600; }
+  p { margin: 0; }
+  .muted { color: var(--muted); }
+  .stat { display: flex; align-items: center; gap: 12px; padding: 12px; border: 1px solid var(--line); border-radius: 12px; }
+  .stat b { font-size: 24px; font-weight: 600; letter-spacing: -.03em; line-height: 1; font-variant-numeric: tabular-nums; }
+  .stat span { color: var(--muted); }
+  .last { padding: 10px 12px; border-radius: 10px; font-size: 12.5px; }
+  .last:empty { display: none; }
+  .last.ok { background: var(--p-bg); color: var(--p-ink); }
+  .last.warn { background: var(--r-bg); color: var(--r-ink); }
+  .last.err { background: var(--f-bg); color: var(--f-ink); }
+  .note { font-size: 12px; color: var(--muted); }
+  input {
+    width: 100%; height: 46px; border: 1px solid var(--line-2); border-radius: 12px; text-align: center;
+    font: 600 20px/1 ui-monospace, SFMono-Regular, monospace; letter-spacing: .16em; text-transform: uppercase; color: var(--ink);
+  }
+  input::placeholder { color: var(--faint); }
+  input:focus { outline: none; border-color: #b9b9c0; box-shadow: 0 0 0 4px rgba(12,12,13,.1); }
+  .btn {
+    width: 100%; height: 38px; border-radius: 999px; border: 1px solid transparent; font-family: inherit; font-size: 13px; font-weight: 500;
+    cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 6px; transition: background .15s;
+  }
+  .btn.primary { background: var(--ink); color: #fff; }
+  .btn.primary:hover:not(:disabled) { background: #2a2a2e; }
+  .btn.ghost { background: #fff; border-color: var(--line-2); color: var(--ink); }
+  .btn.ghost:hover:not(:disabled) { background: var(--soft); }
+  .btn:disabled { opacity: .45; cursor: default; }
+  .row { display: flex; gap: 8px; }
+  .link { background: none; border: 0; padding: 0; color: var(--muted); font: inherit; font-size: 12px; cursor: pointer; text-decoration: underline; text-underline-offset: 2px; }
+  .link:hover { color: var(--ink); }
+  .foot { display: flex; justify-content: space-between; align-items: center; }
+  .err-text { color: var(--f-ink); font-size: 12.5px; }
+  .err-text:empty { display: none; }
+  @keyframes pulse { 50% { opacity: .35; } }
+</style>
+</head>
+<body>
+  <header>
+    <div class="brand"><span class="mark"><i></i></span>Reel Autopost</div>
+    <div class="account" id="account" hidden>
+      <span class="live" id="live"></span>
+      <div><b id="email"></b><small id="state"></small></div>
+    </div>
+  </header>
+
+  <main id="login" hidden>
+    <div>
+      <h1>Conectar a extensão</h1>
+      <p class="muted">No site, abra <b>Conexões</b>, clique em <b>Gerar código</b> e digite aqui.</p>
+    </div>
+    <form id="f">
+      <input id="code" placeholder="XXXX-XXXX" maxlength="9" autocomplete="off" spellcheck="false" required>
+    </form>
+    <p id="login-msg" class="err-text"></p>
+    <button id="go" class="btn primary" form="f">Conectar</button>
+    <div class="foot"><button id="site" class="link" type="button">Abrir o site</button></div>
+  </main>
+
+  <main id="app" hidden>
+    <div class="stat"><b id="waiting">0</b><span id="waiting-label">vídeos esperando pra postar</span></div>
+    <p id="last" class="last"></p>
+    <p class="note" id="handle"></p>
+    <p class="note">Deixe o Chrome aberto e logado no Instagram: os vídeos da fila são postados sozinhos.</p>
+    <div class="row">
+      <button id="check" class="btn primary">Postar agora</button>
+      <button id="site2" class="btn ghost">Abrir o site</button>
+    </div>
+    <div class="foot">
+      <span class="note" id="version"></span>
+      <button id="logout" class="link" type="button">Desconectar</button>
+    </div>
+  </main>
+  <script type="module" src="popup.js"></script>
+</body>
+</html>
